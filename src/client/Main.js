@@ -11,6 +11,7 @@ var PLAYER_MAX_SPEED = 5;
 var canvas;
 var stage;
 var ticker = new Object;
+var circle;
 
 // Graphics
 var player; //The player
@@ -27,13 +28,17 @@ function Main() {
     circle.y = 100;
     stage.addChild(circle);
     stage.update();
+    stage.onkeydown = movePlayer;
+    createjs.Ticker.setFPS(60);
+    createjs.Ticker.addEventListener("tick", stage);
+    ticker.tick = update;
 }
 
 function movePlayer(){
-    player.x ++;
+    circle.x += 10;
 
 }
 
 function update(){
-
+    alert("Test");
 }
