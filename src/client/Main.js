@@ -18,22 +18,14 @@ var player; //The player
 player.x = 0;
 player.y = 0;
 
-function startGame(e) {
-    stage.onkeydown(movePlayer());
-
-    Ticker.addListener(ticker, false);
-    ticker.tick = update;
-}
-
 function Main() {
-    canvas = document.getElementById('Stage');
-    stage = new Stage(canvas);
-
-    stage.mouseEventsEnabled = true;
-
-    /* Ticker */
-    Ticker.setFPS(30);
-    Ticker.addListener(stage);
+    var stage = new createjs.Stage("demoCanvas");
+    var circle = new createjs.Shape();
+    circle.graphics.beginFill("red").drawCircle(0, 0, 50);
+    circle.x = 100;
+    circle.y = 100;
+    stage.addChild(circle);
+    stage.update();
 }
 
 function movePlayer(){
@@ -41,5 +33,5 @@ function movePlayer(){
 }
 
 function update(){
-    
+
 }
