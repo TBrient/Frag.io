@@ -1,44 +1,44 @@
-/**
- * Created by geoffreywang on 2/7/17.
- */
-
 //Constants
 var GRAVITY = 9.8;
 var PLAYER_ACCEL_X = 2;
 var PLAYER_MAX_SPEED = 5;
 
 //Setup
-var canvas;
 var stage;
-var ticker = new Object;
-var circle;
+var keys = {};
 
 // Graphics
-var player; //The player
+var player;
 
-player.x = 0;
-player.y = 0;
 
 function Main() {
-    canvas = document.getElementById('Stage');
     stage = new createjs.Stage("Stage");
-    circle = new createjs.Shape();
-    circle.graphics.beginFill("red").drawCircle(0, 0, 50);
-    circle.x = 100;
-    circle.y = 100;
-    stage.addChild(circle);
-    stage.update();
-    stage.onkeydown = movePlayer;
+
+    player = new createjs.Shape();
+    player.graphics.beginFill("red").drawCircle(0, 0, 50);
+    player.x = 100;
+    player.y = 100;
+    stage.addChild(player);
+
     createjs.Ticker.setFPS(60);
-    createjs.Ticker.addEventListener("tick", stage);
-    ticker.tick = update;
-}
+    createjs.Ticker.addEventListener("tick", update);
 
-function movePlayer(){
-    circle.x += 10;
-
+    this.document.onkeydown = keydown;
+    this.document.onkeyup = keyup;
 }
 
 function update(){
-    alert("Test");
+    if (keys[37]) player.x -= 10;
+    if (keys[38]) player.y -= 10;
+    if (keys[39]) player.x += 10;
+    if (keys[40]) player.y += 10;
+    stage.update();
+}
+
+function keydown(event) {
+    keys[event.keyCode] = true;
+}
+
+function keyup(event) {
+    delete keys[event.keyCode];
 }
