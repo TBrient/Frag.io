@@ -1,5 +1,5 @@
 //Constants
-var GRAVITY = 9.8;
+var GRAVITY = 9.81;
 var PLAYER_ACCEL_X = 2;
 var PLAYER_MAX_SPEED = 5;
 
