@@ -19,18 +19,16 @@ player.x = 0;
 player.y = 0;
 
 function Main() {
-    var stage = new createjs.Stage("Stage");
-    var circle = new createjs.Shape();
-    circle.graphics.beginFill("red").drawCircle(0, 0, 50);
-    circle.x = 100;
-    circle.y = 100;
+    alert("Test");
+    stage = new createjs.Stage("Canvas");
+    player = new createjs.Shape();
+    player.graphics.beginFill("red").drawCircle(0, 0, 50);
     stage.addChild(circle);
     stage.update();
 }
 
 function movePlayer(){
     player.x ++;
-
 }
 
 function update(){
