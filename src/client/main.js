@@ -2,7 +2,7 @@
 var KEY_SPACE = 32, KEY_A = 65, KEY_W = 87, KEY_D = 68, KEY_S = 83, KEY_LEFT = 37, KEY_RIGHT = 39, KEY_UP = 38, KEY_DOWN = 40;
 
 //Constants
-var FRICTION_COEFFICIENT = .7;
+var FRICTION_COEFFICIENT = .9;
 
 //Setup
 var stage;

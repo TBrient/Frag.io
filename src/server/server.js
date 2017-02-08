@@ -54,6 +54,7 @@ io.on('connection', function (socket) {
 
     socket.on('gotit', function (player) {
         //TODO: What do we do when a player connects?
+        //1. get map array
     })
 });
 
