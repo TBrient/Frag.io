@@ -32,18 +32,38 @@ function Player(startingPos, startingWeapon, mass){
 
     this.weapon = startingWeapon;
 
-
     //Create the red circle
     this.node = new createjs.Shape();
     this.node.graphics.beginFill("red").drawCircle(0, 0, 50);
     this.node.x = this.x;
     this.node.y = this.y;
-
-    return this.node;
 }
 
-Player.prototype.update = function () {
+Player.prototype.keystrokeUpdate = function(keys){
+    if (keys[KEY_LEFT]) this.addVelocity(-10);
+    if (keys[KEY_UP]) this.y -= 10;
+    if(keys[KEY_RIGHT]) this.addVelocity(10);
+    if (keys[KEY_DOWN]) this.y += 10;
 
+
+    // if(keys[KEY_D] == true){
+    //     inputForce.magnitude = 60;
+    //     inputForce.direction = 0;
+    // }else{
+    //     inputForce.magnitude = 0;
+    // }
+};
+
+Player.prototype.addVelocity = function(v) {
+    this.velX += v;
+};
+
+Player.prototype.update = function (keys) {
+    this.keystrokeUpdate(keys);
+    this.velX *= FRICTION_COEFFICIENT;
+    this.x += this.velX;
+    this.node.x = this.x;
+    this.node.y = this.y;
 };
 
 // function Player() {

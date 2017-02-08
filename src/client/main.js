@@ -20,7 +20,7 @@ function Main() {
     stage = new createjs.Stage("Stage");
 
     player = new Player({x:100,y:100},0);
-    stage.addChild(player);
+    stage.addChild(player.node);
 
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", update);
@@ -30,11 +30,7 @@ function Main() {
 }
 
 function update(){
-    if (keys[KEY_LEFT]) addVelocity(-10);
-    if (keys[KEY_UP]) player.y -= 10;
-    if(keys[KEY_RIGHT]) addVelocity(10);
-    if (keys[KEY_DOWN]) player.y += 10;
-    movePlayerX();
+    player.update(keys);
     stage.update();
 }
 
@@ -44,13 +40,4 @@ function keydown(event) {
 
 function keyup(event) {
     delete keys[event.keyCode];
-}
-
-function addVelocity(v) {
-    velocity += v;
-}
-
-function movePlayerX() {
-    velocity *= FRICTION_COEFFICIENT;
-    player.x += velocity;
 }
