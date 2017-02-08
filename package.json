@@ -1,0 +1,50 @@
+{
+  "name": "frag.io",
+  "version": "1.0.0",
+  "description": "2D platformer/shooter",
+  "main": "server/server.js",
+  "scripts": {
+    "build": "gulp build",
+    "start": "gulp run",
+    "watch": "gulp watch",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TBrient/frag.io.git"
+  },
+  "author": "Tyler Brient",
+  "license": "MIT",
+  "contributors": [
+    "Tyler Brient <tyler_brient@student.wayland.k12.ma.us> (https://github.com/Tbrient)",
+    "Andrew Eggleston <andrew_eggleston@student.wayland.k12.ma.us> (https://github.com/andreweggleston)",
+    "George Jiang <george_jiang@student.wayland.k12.ma.us> (https://github.com/Sharqosity)",
+    "Geoffrey Wang <geoffrey_wang@student.wayland.k12.ma.us> (https://github.com/Razer0901)"
+  ],
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.14.0",
+    "chai": "^3.5.0",
+    "express": "^4.13.4",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-jshint": "^2.0.1",
+    "gulp-mocha": "^2.2.0",
+    "gulp-nodemon": "^2.0.7",
+    "gulp-todo": "^4.1.0",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "jshint": "^2.9.2",
+    "mocha": "^2.5.3",
+    "node-libs-browser": "^1.0.0",
+    "nodemon": "^1.9.2",
+    "simple-quadtree": "^0.1.3",
+    "socket.io": "^1.4.6",
+    "socket.io-client": "^1.4.6",
+    "sync-request": "^3.0.1",
+    "webpack": "^1.13.1",
+    "webpack-stream": "^3.2.0"
+  }
+}
