@@ -2,9 +2,6 @@
 var KEY_SPACE = 32, KEY_A = 65, KEY_W = 87, KEY_D = 68, KEY_S = 83, KEY_LEFT = 37, KEY_RIGHT = 39, KEY_UP = 38, KEY_DOWN = 40;
 
 //Constants
-var GRAVITY = 9.81;
-var PLAYER_ACCEL_X = 2;
-var PLAYER_MAX_SPEED = 5;
 var FRICTION_COEFFICIENT = .7;
 
 //Setup

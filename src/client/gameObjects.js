@@ -40,10 +40,10 @@ function Player(startingPos, startingWeapon, mass){
 }
 
 Player.prototype.keystrokeUpdate = function(keys){
-    if (keys[KEY_LEFT]) this.addVelocity(-10);
-    if (keys[KEY_UP]) this.y -= 10;
-    if(keys[KEY_RIGHT]) this.addVelocity(10);
-    if (keys[KEY_DOWN]) this.y += 10;
+    if (keys[KEY_A]) this.addVelocity(-10);
+    if (keys[KEY_W]) this.y -= 10;
+    if(keys[KEY_D]) this.addVelocity(10);
+    if (keys[KEY_S]) this.y += 10;
 
 
     // if(keys[KEY_D] == true){
