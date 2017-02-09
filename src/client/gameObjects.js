@@ -75,6 +75,9 @@ function Player(startingPos, physicalFeatures, startingWeapon) {
         };
     }
 
+    this.isJumping = false;
+    this.isOnGround = false;
+
     //Set initial positions
     this.x = startingPos.x;
     this.y = startingPos.y;
@@ -95,7 +98,11 @@ function Player(startingPos, physicalFeatures, startingWeapon) {
  */
 Player.prototype.inputUpdate = function (keys) {
     if (keys[KEY_A]) this.velX -= 3;
-    if (keys[KEY_W]) this.y -= 10;
+    if (keys[KEY_W]) {
+        if (this.isOnGround) {
+            this.isJumping = true;
+        }
+    }
     if (keys[KEY_D]) this.velX += 3;
     if (keys[KEY_S]) this.y += 10;
 };
@@ -118,12 +125,18 @@ Player.prototype.physicsUpdate = function (platforms, constants) {
 };
 
 Player.prototype.collisionUpdate = function (platforms, constants) {
-    if (this.isColliding(platforms)) {
-        this.accelY = 0;
-        this.velY = 0;
-        console.log("HIT!")
+    if (this.isJumping) {
+        this.accelY = -5;
+        this.isJumping = false;
+        this.isOnGround = false;
     } else {
-        this.accelY = constants.gravity;
+        if (this.isColliding(platforms)) {
+            this.accelY = 0;
+            this.velY = 0;
+            this.isOnGround = true;
+        } else {
+            this.accelY = constants.gravity;
+        }
     }
 };
 
@@ -164,8 +177,8 @@ Player.prototype.isIntersecting = function (target) {
  * @param constants
  */
 Player.prototype.update = function (keys, constants, platforms) {
-    this.inputUpdate(keys);
     this.physicsUpdate(platforms, constants);
+    this.inputUpdate(keys);
 };
 
 function Platform(position, physicalFeatures, color) {
