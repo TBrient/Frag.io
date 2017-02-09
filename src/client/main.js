@@ -45,5 +45,7 @@ function keyup(event) {
 }
 
 function addWorldToStage(world){
-    stage.addChild(world.player.node);
+    world.players.forEach(function (player, index) {
+        stage.addChild(player.node);
+    });
 }

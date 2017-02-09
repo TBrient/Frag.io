@@ -1,3 +1,4 @@
+//Constructor of the World object
 function World(){
     this.constants = {
         gravity: 9.8,
@@ -5,14 +6,18 @@ function World(){
         muS: 0.8,
         muK: 0.9
     };
+    this.players = [];
 }
 
 World.prototype.addPlayer = function (player) {
-    this.player = player;
+    this.players.push(player);
 };
 
 World.prototype.update = function (keys) {
-    this.player.update(keys, this.constants);
+    var that = this;
+    this.players.forEach(function (player, index) {
+        player.update(keys, that.constants)
+    });
 };
 
 //Constructor of the Player object
