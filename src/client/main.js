@@ -1,26 +1,24 @@
 //Keycodes
 var KEY_SPACE = 32, KEY_A = 65, KEY_W = 87, KEY_D = 68, KEY_S = 83, KEY_LEFT = 37, KEY_RIGHT = 39, KEY_UP = 38, KEY_DOWN = 40;
 
-//Constants
-var FRICTION_COEFFICIENT = .9;
-
 //Setup
-var stage;
-var keys = {};
+var stage; //The object we draw/animate on (Canvas)
+var keys = {}; //Stores all the keypresses
 
 //World
 var world;
 
-var velocity = 0;
-
+/**
+ * Main function that initializes everything
+ * @constructor
+ */
 function Main() {
-    stage = new createjs.Stage("Stage");
+    stage = new createjs.Stage("Canvas"); //Point and set the stage to corrispond to the "Canvas" in the HTML
 
+    //Set up the world
     world = new World();
-
-    var player = new Player({x:100,y:100},0);
-
-    world.addPlayer(player);
+    world.addPlayer(new Player({x:100,y:100},0,65,"red")); //Add a player
+    world.addPlayer(new Player({x:400,y:200},0,65,"blue")); //Add another player
 
     addWorldToStage(world);
 

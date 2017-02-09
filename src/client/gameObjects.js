@@ -21,7 +21,7 @@ World.prototype.update = function (keys) {
 };
 
 //Constructor of the Player object
-function Player(startingPos, startingWeapon, mass){
+function Player(startingPos, startingWeapon, mass, color){
 
     //Physics stuff
     this.inputForce = {magnitude: 0,direction: 0};
@@ -38,7 +38,7 @@ function Player(startingPos, startingWeapon, mass){
 
     //Create the red circle
     this.node = new createjs.Shape();
-    this.node.graphics.beginFill("red").drawCircle(0, 0, 50);
+    this.node.graphics.beginFill(color).drawCircle(0, 0, 50);
     this.node.x = this.x;
     this.node.y = this.y;
 }
