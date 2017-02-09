@@ -4,10 +4,10 @@
  */
 function World(){
     this.constants = {
-        gravity: 0.1,
+        gravity: 0.4,
         maxHorizontalSpeed: 5,
         muS: 0.8,
-        muK: 0.9
+        muK: 0.5
     };
     this.players = [];
     this.platforms = [];
@@ -97,14 +97,20 @@ function Player(startingPos, physicalFeatures, startingWeapon) {
  * @param keys
  */
 Player.prototype.inputUpdate = function (keys) {
-    if (keys[KEY_A]) this.velX -= 3;
+    if (keys[KEY_A]) {
+        this.accelX = -3;
+    } else if (keys[KEY_D]) {
+        this.accelX = 3;
+    } else {
+        this.accelX = 0;
+    }
+
     if (keys[KEY_W]) {
         if (this.isOnGround) {
             this.isJumping = true;
         }
     }
-    if (keys[KEY_D]) this.velX += 3;
-    if (keys[KEY_S]) this.y += 10;
+    // if (keys[KEY_S]) this.y += 10;
 };
 
 /**
@@ -114,7 +120,19 @@ Player.prototype.inputUpdate = function (keys) {
 Player.prototype.physicsUpdate = function (platforms, constants) {
     this.collisionUpdate(platforms, constants);
 
-    this.velX *= constants.muK;
+    if (this.velX > 0) {
+        this.velX -= constants.muK;
+    } else if (this.velX < 0) {
+        this.velX += constants.muK;
+    }
+
+    this.velX += this.accelX;
+    if (this.velX > constants.maxHorizontalSpeed) {
+        this.velX = constants.maxHorizontalSpeed;
+    } else if (this.velX < -constants.maxHorizontalSpeed) {
+        this.velX = -constants.maxHorizontalSpeed;
+
+    }
     this.x += this.velX;
 
     this.velY += this.accelY;
@@ -126,7 +144,7 @@ Player.prototype.physicsUpdate = function (platforms, constants) {
 
 Player.prototype.collisionUpdate = function (platforms, constants) {
     if (this.isJumping) {
-        this.accelY = -5;
+        this.accelY = -10;
         this.isJumping = false;
         this.isOnGround = false;
     } else {

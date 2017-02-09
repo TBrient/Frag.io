@@ -17,9 +17,12 @@ function Main() {
 
     //Set up the world
     world = new World();
-    world.addPlayer(new Player({x: 100, y: 100}, {color: "red", mass: 65})); //Add a player
-    world.addPlayer(new Player({x: 400, y: 200}, {color: "green", mass: 65})); //Add another player
-    world.addPlatform(new Platform({x: 0, y: 400}, {width: 600, height: 20}, "pink"));
+    world.addPlayer(new Player({x: 50, y: 500}, {color: "blue", mass: 65, width: 10, height: 15})); //Add a player
+    world.addPlatform(new Platform({x: 0, y: 700}, {width: 800, height: 20}, "red"));
+    world.addPlatform(new Platform({x: 300, y: 600}, {width: 100, height: 20}, "pink"));
+    world.addPlatform(new Platform({x: 500, y: 500}, {width: 100, height: 20}, "green"));
+    world.addPlatform(new Platform({x: 700, y: 400}, {width: 100, height: 20}, "purple"));
+
     addWorldToStage(world);
 
     //Set framerate and update method
