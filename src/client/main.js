@@ -19,6 +19,7 @@ function Main() {
     world = new World();
     world.addPlayer(new Player({x: 100, y: 100}, {color: "red", mass: 65})); //Add a player
     world.addPlayer(new Player({x: 400, y: 200}, {color: "green", mass: 65})); //Add another player
+    world.addPlatform(new Platform({x: 0, y: 400}, {width: 600, height: 20}, "pink"));
     addWorldToStage(world);
 
     //Set framerate and update method
@@ -46,6 +47,9 @@ function addWorldToStage(world) {
     world.players.forEach(function (player) {
         stage.addChild(player.node);
     });
+    world.platforms.forEach(function (platform) {
+        stage.addChild(platform.node);
+    })
 }
 
 //-------------------- Utility Functions --------------------
