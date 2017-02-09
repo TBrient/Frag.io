@@ -3,17 +3,14 @@ function World(){
     this.maxHorizontalSpeed = 5;
     this.muK = 0.7;
     this.muS = 0.8;
-    this.players = {};
 }
 
 World.prototype.addPlayer = function (player) {
-    this.players.add(player);
+    this.player = player;
 };
 
-World.prototype.update = function () {
-    for(player in this.players){
-        player.update();
-    }
+World.prototype.update = function (keys) {
+    this.player.update(keys);
 };
 
 //Constructor of the Player object
@@ -42,7 +39,7 @@ function Player(startingPos, startingWeapon, mass){
 Player.prototype.keystrokeUpdate = function(keys){
     if (keys[KEY_A]) this.addVelocity(-3);
     if (keys[KEY_W]) this.y -= 10;
-    if(keys[KEY_D]) this.addVelocity(3);
+    if (keys[KEY_D]) this.addVelocity(3);
     if (keys[KEY_S]) this.y += 10;
 
 

@@ -8,16 +8,21 @@ var FRICTION_COEFFICIENT = .9;
 var stage;
 var keys = {};
 
-// Graphics
-var player;
+//World
+var world;
 
 var velocity = 0;
 
 function Main() {
     stage = new createjs.Stage("Stage");
 
-    player = new Player({x:100,y:100},0);
-    stage.addChild(player.node);
+    world = new World();
+
+    var player = new Player({x:100,y:100},0);
+
+    world.addPlayer(player);
+
+    addWorldToStage(world);
 
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", update);
@@ -27,7 +32,7 @@ function Main() {
 }
 
 function update(){
-    player.update(keys);
+    world.update(keys);
     stage.update();
 }
 
@@ -37,4 +42,8 @@ function keydown(event) {
 
 function keyup(event) {
     delete keys[event.keyCode];
+}
+
+function addWorldToStage(world){
+    stage.addChild(world.player.node);
 }
