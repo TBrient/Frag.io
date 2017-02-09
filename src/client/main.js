@@ -17,8 +17,8 @@ function Main() {
 
     //Set up the world
     world = new World();
-    world.addPlayer(new Player({x:100,y:100},0,65,"red")); //Add a player
-    world.addPlayer(new Player({x:400,y:200},0,65,"blue")); //Add another player
+    world.addPlayer(new Player({x: 100, y: 100}, {color: "red", mass: 65})); //Add a player
+    world.addPlayer(new Player({x: 400, y: 200}, {color: "green", mass: 65})); //Add another player
     addWorldToStage(world);
 
     //Set framerate and update method
