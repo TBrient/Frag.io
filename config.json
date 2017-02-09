@@ -1,0 +1,10 @@
+{
+  "port": 3000,
+  "adminPass": "DEFAULT",
+  "slowBase": 4.5,
+  "logChat": 0,
+  "networkUpdateFactor": 40,
+  "maxHeartbeatInterval": 5000,
+  "newPlayerInitialPosition": "farthest",
+  "mergeTimer": 15
+}
