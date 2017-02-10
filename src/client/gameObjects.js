@@ -2,12 +2,15 @@
  * Creates a World object
  * @constructor
  */
+
+
 function World(){
     this.constants = {
         gravity: 0.4,
         maxHorizontalSpeed: 5,
         muS: 0.8,
-        muK: 0.5
+        muK: 0.5,
+        muKAir: 0.1
     };
     this.players = [];
     this.platforms = [];
@@ -57,6 +60,9 @@ function Player(startingPos, physicalFeatures, startingWeapon) {
     this.velY = 0;
     this.accelX = 0;
     this.accelY = 0;
+    this.xJumpSpeed = 0;
+    this.yJumpSpeed = 0;
+    this.jumpTime = 0;
 
     //Physical features
     if (physicalFeatures != undefined) {
@@ -97,33 +103,69 @@ function Player(startingPos, physicalFeatures, startingWeapon) {
  * @param keys
  */
 Player.prototype.inputUpdate = function (keys) {
-    if (keys[KEY_A]) {
-        this.accelX = -3;
-    } else if (keys[KEY_D]) {
-        this.accelX = 3;
-    } else {
-        this.accelX = 0;
-    }
 
-    if (keys[KEY_W]) {
-        if (this.isOnGround) {
-            this.isJumping = true;
+    if (this.isOnGround) {
+        if (keys[KEY_A]) {
+            this.accelX = -3;
+        } else if (keys[KEY_D]) {
+            this.accelX = 3;
+        } else {
+            this.accelX = 0;
+        }
+    } else {
+        if (keys[KEY_A]) {
+            this.accelX = -0.5;
+        } else if (keys[KEY_D]) {
+            this.accelX = 0.5;
+        } else {
+            this.accelX = 0;
         }
     }
+
+    if (keys[KEY_W] && this.isOnGround) {
+        this.isJumping = true;
+    }
+
+
     // if (keys[KEY_S]) this.y += 10;
 };
 
-/**
+/**    // if (keys[KEY_W] || this.jumpTime < 0 && !this.isOnGround) {
+    //     if (jumpTime < 0) {
+    //         this.accelX = this.xJumpSpeed;
+    //         this.accelY = -this.jumpTime * this.yJumpSpeed;
+    //         this.jumpTime++;
+    //     } else if (this.isOnGround && keys[KEY_W]) {
+    //         this.xJumpSpeed = 0;
+    //         this.yJumpSpeed = -1.9;
+    //         this.jumpTime = 7;
+    //         this.accelY = this.jumpTime * this.yJumpSpeed;
+    //         this.isOnGround = false;
+    //     } else if (this.jumpTime > 0) {
+    //         this.accelX += this.xJumpSpeed;
+    //         this.accelY = this.jumpTime * this.yJumpSpeed;
+    //         this.jumpTime--;
+    //     }
+    //
+    // }
  * Update the player's position (with physics)
  * @param constants
  */
 Player.prototype.physicsUpdate = function (platforms, constants) {
     this.collisionUpdate(platforms, constants);
 
-    if (this.velX > 0) {
-        this.velX -= constants.muK;
-    } else if (this.velX < 0) {
-        this.velX += constants.muK;
+    if (this.isOnGround ) {
+        if (this.velX > .1) {
+            this.velX -= constants.muK;
+        } else if (this.velX < 0) {
+            this.velX += constants.muK;
+        }
+    } else {
+        if (this.velX > .1) {
+            this.velX -= constants.muKAir;
+        } else if (this.velX < 0) {
+            this.velX += constants.muKAir;
+        }
     }
 
     this.velX += this.accelX;
