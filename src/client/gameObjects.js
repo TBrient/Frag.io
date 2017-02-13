@@ -125,9 +125,9 @@ Player.prototype.inputUpdate = function (keys) {
             this.jumpTime = 0.23;
             this.isOnGround = false;
             this.isJumping = true;
-            this.velY = -this.jumpTime * 20;
+            this.velY = -this.jumpTime * 40;
         } else if (!this.isOnGround && this.jumpTime > 0){
-            this.jumpTime -= 1/160;
+            this.jumpTime -= 1/180;
             this.velY = -this.jumpTime*30;
         } else if (!this.isOnGround && this.jumpTime <= 0) {
             this.accelY = .4;
