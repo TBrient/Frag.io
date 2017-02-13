@@ -122,13 +122,13 @@ Player.prototype.inputUpdate = function (keys) {
 
     if (keys[KEY_W]) {
         if (this.isOnGround && !this.isJumping) {
-            this.jumpTime = 0.5;
+            this.jumpTime = 0.23;
             this.isOnGround = false;
             this.isJumping = true;
             this.velY = -this.jumpTime * 20;
         } else if (!this.isOnGround && this.jumpTime > 0){
-            this.jumpTime -= 1/70;
-            this.velY = -this.jumpTime*20;
+            this.jumpTime -= 1/160;
+            this.velY = -this.jumpTime*30;
         } else if (!this.isOnGround && this.jumpTime <= 0) {
             this.accelY = .4;
             jumpTime = 0;
