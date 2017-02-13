@@ -8,9 +8,9 @@ function World(){
     this.constants = {
         gravity: 0.4,
         maxHorizontalSpeed: 5,
-        muS: 0.8,
-        muK: 0.5,
-        muKAir: 0.1
+        muS: 0.2,
+        muK: 0.6,
+        muKAir: 0.9
     };
     this.players = [];
     this.platforms = [];
@@ -60,9 +60,7 @@ function Player(startingPos, physicalFeatures, startingWeapon) {
     this.velY = 0;
     this.accelX = 0;
     this.accelY = 0;
-    this.xJumpSpeed = 0;
-    this.yJumpSpeed = 0;
-    this.jumpTime = 0;
+    this.jumpTime = 0.0;
 
     //Physical features
     if (physicalFeatures != undefined) {
@@ -122,8 +120,23 @@ Player.prototype.inputUpdate = function (keys) {
         }
     }
 
-    if (keys[KEY_W] && this.isOnGround) {
-        this.isJumping = true;
+    if (keys[KEY_W]) {
+        if (this.isOnGround && !this.isJumping) {
+            this.jumpTime = 0.5;
+            this.isOnGround = false;
+            this.isJumping = true;
+            this.velY = -this.jumpTime * 20;
+        } else if (!this.isOnGround && this.jumpTime > 0){
+            this.jumpTime -= 1/70;
+            this.velY = -this.jumpTime*20;
+        } else if (!this.isOnGround && this.jumpTime <= 0) {
+            this.accelY = .4;
+            jumpTime = 0;
+        }
+    }
+    else {
+        this.jumpTime = 0;
+        this.accelY = .4;
     }
 
 
@@ -155,16 +168,16 @@ Player.prototype.physicsUpdate = function (platforms, constants) {
     this.collisionUpdate(platforms, constants);
 
     if (this.isOnGround ) {
-        if (this.velX > .1) {
-            this.velX -= constants.muK;
+        if (this.velX > 0) {
+            this.velX *= constants.muK;
         } else if (this.velX < 0) {
-            this.velX += constants.muK;
+            this.velX *= constants.muK;
         }
     } else {
-        if (this.velX > .1) {
-            this.velX -= constants.muKAir;
+        if (this.velX > 0) {
+            this.velX *= constants.muKAir;
         } else if (this.velX < 0) {
-            this.velX += constants.muKAir;
+            this.velX *= constants.muKAir;
         }
     }
 
@@ -180,13 +193,13 @@ Player.prototype.physicsUpdate = function (platforms, constants) {
     this.velY += this.accelY;
     this.y += this.velY;
 
+
     this.node.x = this.x;
     this.node.y = this.y;
 };
 
 Player.prototype.collisionUpdate = function (platforms, constants) {
     if (this.isJumping) {
-        this.accelY = -10;
         this.isJumping = false;
         this.isOnGround = false;
     } else {
@@ -195,7 +208,7 @@ Player.prototype.collisionUpdate = function (platforms, constants) {
             this.velY = 0;
             this.isOnGround = true;
         } else {
-            this.accelY = constants.gravity;
+            // this.accelY = constants.gravity;
         }
     }
 };
@@ -227,7 +240,6 @@ Player.prototype.isIntersecting = function (target) {
     if (this.y + this.physicalFeatures.height >= target.y && this.y + this.physicalFeatures.height <= target.y + target.physicalFeatures.height) {
         yIntersect = true;
     }
-    console.log(xIntersect, yIntersect);
     return xIntersect && yIntersect;
 };
 
