@@ -138,12 +138,15 @@ Player.prototype.inputUpdate = function (keys) {
             this.isOnGround = false;
             this.isJumping = true;
             this.velY = -this.jumpTime * 40;
+            console.log("1");
         } else if (!this.isOnGround && this.jumpTime > 0){
             this.jumpTime -= 1/180;
             this.velY = -this.jumpTime*30;
+            console.log("2");
         } else if (!this.isOnGround && this.jumpTime <= 0) {
             this.accelY = .4;
             jumpTime = 0;
+            console.log("3")
         }
     }
     else {
@@ -228,6 +231,7 @@ Player.prototype.collisionUpdate = function (platforms, constants) {
             this.velY = 0;
             this.isOnGround = true;
         } else {
+            this.isOnGround = false;
             // this.accelY = constants.gravity;
         }
     }
