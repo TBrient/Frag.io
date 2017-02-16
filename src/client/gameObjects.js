@@ -2,6 +2,10 @@
  * Creates a World object
  * @constructor
  */
+let LEFT = -1;
+let RIGHT = 1;
+let TOP = 2;
+let BOTTOM = -2;
 
 
 function World(){
@@ -112,9 +116,17 @@ Player.prototype.inputUpdate = function (keys) {
         }
     } else {
         if (keys[KEY_A]) {
-            this.accelX = -0.5;
+            if (keys[KEY_W]) {
+                this.accelX = -0.2;
+            } else {
+                this.accelX = -0.3;
+            }
         } else if (keys[KEY_D]) {
-            this.accelX = 0.5;
+            if (keys[KEY_W]) {
+                this.accelX = 0.2;
+            } else {
+                this.accelX = 0.3;
+            }
         } else {
             this.accelX = 0;
         }
@@ -174,11 +186,11 @@ Player.prototype.physicsUpdate = function (platforms, constants) {
             this.velX *= constants.muK;
         }
     } else {
-        if (this.velX > 0) {
-            this.velX *= constants.muKAir;
-        } else if (this.velX < 0) {
-            this.velX *= constants.muKAir;
-        }
+        // if (this.velX > 0) {
+        //     this.velX *= constants.muKAir;
+        // } else if (this.velX < 0) {
+        //     this.velX *= constants.muKAir;
+        // }
     }
 
     this.velX += this.accelX;
@@ -196,6 +208,14 @@ Player.prototype.physicsUpdate = function (platforms, constants) {
 
     this.node.x = this.x;
     this.node.y = this.y;
+};
+
+Player.prototype.collided = function (side) {
+    if (Math.abs(side) === 1) {
+        this.velX = this.velX*(-0.1);
+    } else {
+        this.velY = 0;
+    }
 };
 
 Player.prototype.collisionUpdate = function (platforms, constants) {
