@@ -226,7 +226,7 @@ Player.prototype.collisionUpdate = function (platforms, constants) {
         this.isJumping = false;
         this.isOnGround = false;
     } else {
-        if (this.isColliding(platforms)) {
+        if (this.isCollidingNextFrame(platforms)) {
             this.accelY = 0;
             this.velY = 0;
             this.isOnGround = true;
@@ -237,34 +237,59 @@ Player.prototype.collisionUpdate = function (platforms, constants) {
     }
 };
 
-Player.prototype.isColliding = function (platforms) {
+Player.prototype.isCollidingNextFrame = function (platforms) {
     var that = this;
     var returnValue = false;
     platforms.forEach(
         function (platform) {
             if (!returnValue) {
-                returnValue = that.isIntersecting(platform);
+                returnValue = that.isIntersectingNextFrame(platform);
             }
         }
     );
     return returnValue;
 };
 
-Player.prototype.isIntersecting = function (target) {
-    var xIntersect = false, yIntersect = false;
-    if (this.x >= target.x && this.x <= target.x + target.physicalFeatures.width) {
+Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they are gonna collide next frame, find delta and move by that much
+    var nextFrameX = this.velX + this.x;
+    var nextFrameY = this.velY + this.accelY + this.y;
+    var xIntersect = false, xIntersectRight = false, yIntersectTop = false, yIntersectBottom = false; //Directions refer to player side
+    if (nextFrameX >= target.x && nextFrameX <= target.x + target.physicalFeatures.width) {
         xIntersect = true;
     }
-    if (this.x + this.physicalFeatures.width >= target.x && this.x + this.physicalFeatures.width <= target.x + target.physicalFeatures.width) {
+    if (nextFrameX + this.physicalFeatures.width >= target.x && nextFrameX + this.physicalFeatures.width <= target.x + target.physicalFeatures.width) {
         xIntersect = true;
     }
-    if (this.y >= target.y && this.y <= target.y + target.physicalFeatures.height) {
-        yIntersect = true;
+    if (nextFrameY >= target.y && nextFrameY <= target.y + target.physicalFeatures.height) {
+        // console.log("next Frame y: " + nextFrameY);
+        // console.log("target y: " + target.y);
+        // console.log("target y2: " + target.y + target.physicalFeatures.height);
+        console.log("Top Hit");
+        yIntersectTop = true;
     }
-    if (this.y + this.physicalFeatures.height >= target.y && this.y + this.physicalFeatures.height <= target.y + target.physicalFeatures.height) {
-        yIntersect = true;
+    if (nextFrameY + this.physicalFeatures.height >= target.y && nextFrameY + this.physicalFeatures.height <= target.y + target.physicalFeatures.height) {
+        yIntersectBottom = true;
+        console.log("Bottom Hit");
     }
-    return xIntersect && yIntersect;
+
+    // this.y += 5;
+
+    if (xIntersect && (yIntersectBottom || yIntersectTop)) {
+        // console.log("This Y: " + this.y + " This AccelY: " + this.accelY + " This VelY: " + this.velY);
+        // console.log("Target Top Y: " + target.y + " Target Bottom Y: " + (target.y + target.physicalFeatures.height));
+        // console.log(this.y);
+        // console.log(target.y);
+        if (yIntersectBottom) {
+            this.y += (target.y - this.y - this.physicalFeatures.height); //Only works if intersecting with the bottom of player (top of platform)
+        }
+        if (yIntersectTop) {
+            this.y += (target.y + target.physicalFeatures.height - this.y); //Works for top of player (bottom of platform)
+        }
+        this.accelY = 0;
+        this.velY = 0;
+    }
+
+    return xIntersect && (yIntersectBottom || yIntersectTop);
 };
 
 /**
