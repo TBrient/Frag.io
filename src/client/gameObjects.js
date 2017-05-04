@@ -227,9 +227,7 @@ Player.prototype.collisionUpdate = function (platforms, constants) {
         this.isOnGround = false;
     } else {
         if (this.isCollidingNextFrame(platforms)) {
-            this.accelY = 0;
-            this.velY = 0;
-            this.isOnGround = true;
+
         } else {
             this.isOnGround = false;
             // this.accelY = constants.gravity;
@@ -264,12 +262,12 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         // console.log("next Frame y: " + nextFrameY);
         // console.log("target y: " + target.y);
         // console.log("target y2: " + target.y + target.physicalFeatures.height);
-        console.log("Top Hit");
+        // console.log("Top Hit");
         yIntersectTop = true;
     }
     if (nextFrameY + this.physicalFeatures.height >= target.y && nextFrameY + this.physicalFeatures.height <= target.y + target.physicalFeatures.height) {
         yIntersectBottom = true;
-        console.log("Bottom Hit");
+        // console.log("Bottom Hit");
     }
 
     // this.y += 5;
@@ -281,9 +279,16 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         // console.log(target.y);
         if (yIntersectBottom) {
             this.y += (target.y - this.y - this.physicalFeatures.height); //Only works if intersecting with the bottom of player (top of platform)
+            this.isOnGround = true;
         }
         if (yIntersectTop) {
-            this.y += (target.y + target.physicalFeatures.height - this.y); //Works for top of player (bottom of platform)
+            this.y = (target.y + target.physicalFeatures.height); //Works for top of player (bottom of platform)
+            if (((this.x <= (target.x + 2) && this.x >= (target.x - 2)) || (this.x >= (target.x + target.physicalFeatures.width - 10) && this.x <= (target.x + target.physicalFeatures.width - 6))) && this.velX != 0) {
+                this.isOnGround = true;
+            } else {
+                this.isOnGround = false;
+            }
+
         }
         this.accelY = 0;
         this.velY = 0;
