@@ -275,11 +275,9 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
 
     if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
         var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
-        console.log("this.y + this.physicalFeatures.height: " + one);
-        console.log("target.y + 2: " + two);
         console.log("this.y: " + three);
         console.log("target.y + target.physicalFeatures.height - 2: " + four);
-         if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height -2))) {
+         if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && !this.isJumping && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
             if (this.velX <= 0) {
                 // this.x = target.x - this.physicalFeatures.width;
                 this.accelX = -this.accelX;
@@ -299,18 +297,24 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         if (yIntersectBottom) {
             this.y += (target.y - this.y - this.physicalFeatures.height); //Only works if intersecting with the bottom of player (top of platform)
             this.isOnGround = true;
+            this.accelY = 0;
+            this.velY = 0;
         }
         if (yIntersectTop) {
             this.y = (target.y + target.physicalFeatures.height); //Works for top of player (bottom of platform)
-            if (((this.x <= (target.x + 2) && this.x >= (target.x - 2)) || (this.x >= (target.x + target.physicalFeatures.width - 10) && this.x <= (target.x + target.physicalFeatures.width - 6))) && this.velX != 0) {
-                this.isOnGround = true;
-            } else {
-                this.isOnGround = false;
-            }
-
+            // if (((this.x <= (target.x + 2) && this.x >= (target.x - 2)) || (this.x >= (target.x + target.physicalFeatures.width - 10) && this.x <= (target.x + target.physicalFeatures.width - 6))) && this.velX != 0) {
+            //     this.isOnGround = true;
+            //
+            // } else {
+            //     this.isOnGround = false;
+            // }
+            this.accelY = 0;
+            this.velY = 0;
         }
-        this.accelY = 0;
-        this.velY = 0;
+        // if ((this.x <= target.x + target.physicalFeatures.width+1 && this.x >= target.x + target.physicalFeatures.width-1) && (this.x + this.physicalFeatures.width >= target.x-1 && this.x + this.physicalFeatures.width <= target.x+1)) {
+        //     this.accelX = -this.accelX;
+        //     this.velX = -this.velX;
+        // }
     }
 
 
