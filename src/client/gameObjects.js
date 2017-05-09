@@ -14,7 +14,7 @@ function World(){
         maxHorizontalSpeed: 5,
         muS: 0.2,
         muK: 0.6,
-        muKAir: 0.9
+        muKAir: 0.95
     };
     this.players = [];
     this.platforms = [];
@@ -138,15 +138,12 @@ Player.prototype.inputUpdate = function (keys) {
             this.isOnGround = false;
             this.isJumping = true;
             this.velY = -this.jumpTime * 40;
-            console.log("1");
         } else if (!this.isOnGround && this.jumpTime > 0){
             this.jumpTime -= 1/180;
             this.velY = -this.jumpTime*30;
-            console.log("2");
         } else if (!this.isOnGround && this.jumpTime <= 0) {
             this.accelY = .4;
             jumpTime = 0;
-            console.log("3")
         }
     }
     else {
@@ -251,12 +248,16 @@ Player.prototype.isCollidingNextFrame = function (platforms) {
 Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they are gonna collide next frame, find delta and move by that much
     var nextFrameX = this.velX + this.x;
     var nextFrameY = this.velY + this.accelY + this.y;
-    var xIntersect = false, xIntersectRight = false, yIntersectTop = false, yIntersectBottom = false; //Directions refer to player side
+    var xIntersectMain = false, xIntersectRight = false, xIntersectLeft = false, yIntersectTop = false, yIntersectBottom = false; //Directions refer to player side
     if (nextFrameX >= target.x && nextFrameX <= target.x + target.physicalFeatures.width) {
-        xIntersect = true;
-    }
-    if (nextFrameX + this.physicalFeatures.width >= target.x && nextFrameX + this.physicalFeatures.width <= target.x + target.physicalFeatures.width) {
-        xIntersect = true;
+        if (nextFrameX + this.physicalFeatures.width >= target.x && nextFrameX + this.physicalFeatures.width <= target.x + target.physicalFeatures.width) {
+            xIntersectMain = true;
+        } else {
+            //Intersecting of the right side of player
+            xIntersectRight = true;
+        }
+    } else if (nextFrameX + this.physicalFeatures.width >= target.x && nextFrameX + this.physicalFeatures.width <= target.x + target.physicalFeatures.width) {
+        xIntersectLeft = true;
     }
     if (nextFrameY >= target.y && nextFrameY <= target.y + target.physicalFeatures.height) {
         // console.log("next Frame y: " + nextFrameY);
@@ -272,7 +273,25 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
 
     // this.y += 5;
 
-    if (xIntersect && (yIntersectBottom || yIntersectTop)) {
+    if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
+        var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
+        console.log("this.y + this.physicalFeatures.height: " + one);
+        console.log("target.y + 2: " + two);
+        console.log("this.y: " + three);
+        console.log("target.y + target.physicalFeatures.height - 2: " + four);
+         if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height -2))) {
+            if (this.velX <= 0) {
+                // this.x = target.x - this.physicalFeatures.width;
+                this.accelX = -this.accelX;
+                this.velX = -this.velX;
+            } else {
+                // this.x = target.x + target.physicalFeatures.width;
+                this.accelX = -this.accelX;
+                this.velX = -this.velX;
+            }
+        }
+
+    } else if (xIntersectMain && (yIntersectBottom || yIntersectTop)) {
         // console.log("This Y: " + this.y + " This AccelY: " + this.accelY + " This VelY: " + this.velY);
         // console.log("Target Top Y: " + target.y + " Target Bottom Y: " + (target.y + target.physicalFeatures.height));
         // console.log(this.y);
@@ -294,7 +313,9 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         this.velY = 0;
     }
 
-    return xIntersect && (yIntersectBottom || yIntersectTop);
+
+
+    return xIntersectMain && (yIntersectBottom || yIntersectTop);
 };
 
 /**

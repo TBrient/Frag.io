@@ -22,6 +22,7 @@ function Main() {
     world.addPlatform(new Platform({x: 300, y: 600}, {width: 100, height: 20}, "pink"));
     world.addPlatform(new Platform({x: 500, y: 500}, {width: 100, height: 20}, "green"));
     world.addPlatform(new Platform({x: 700, y: 400}, {width: 100, height: 20}, "purple"));
+    world.addPlatform(new Platform({x: 900, y: 200}, {width: 100, height: 100}, "orange"));
 
     addWorldToStage(world);
 
@@ -32,6 +33,10 @@ function Main() {
     //Keyevents
     this.document.onkeydown = keydown;
     this.document.onkeyup = keyup;
+}
+
+function addDebugVisuals(){
+
 }
 
 /**
