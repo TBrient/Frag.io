@@ -273,23 +273,7 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
 
     // this.y += 5;
 
-    if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
-        var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
-        console.log("this.y: " + three);
-        console.log("target.y + target.physicalFeatures.height - 2: " + four);
-         if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && !this.isJumping && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
-            if (this.velX <= 0) {
-                // this.x = target.x - this.physicalFeatures.width;
-                this.accelX = -this.accelX;
-                this.velX = -this.velX;
-            } else {
-                // this.x = target.x + target.physicalFeatures.width;
-                this.accelX = -this.accelX;
-                this.velX = -this.velX;
-            }
-        }
-
-    } else if (xIntersectMain && (yIntersectBottom || yIntersectTop)) {
+    if (xIntersectMain && (yIntersectBottom || yIntersectTop)) {
         // console.log("This Y: " + this.y + " This AccelY: " + this.accelY + " This VelY: " + this.velY);
         // console.log("Target Top Y: " + target.y + " Target Bottom Y: " + (target.y + target.physicalFeatures.height));
         // console.log(this.y);
@@ -315,9 +299,25 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         //     this.accelX = -this.accelX;
         //     this.velX = -this.velX;
         // }
+    } else if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
+        var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
+        console.log("this.y: " + three);
+        console.log("target.y + target.physicalFeatures.height - 2: " + four);
+        if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && !this.isJumping && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
+            if (this.velX <= 0) {
+                // this.x = target.x - this.physicalFeatures.width;
+                this.accelX = -this.accelX;
+                this.velX = -this.velX;
+            } else {
+                // this.x = target.x + target.physicalFeatures.width;
+                this.accelX = -this.accelX;
+                this.velX = -this.velX;
+            }
+            if (target.physicalFeatures.height == 100) {
+                window.alert("You're Gay");
+            }
+        }
     }
-
-
 
     return xIntersectMain && (yIntersectBottom || yIntersectTop);
 };
