@@ -18,6 +18,7 @@ function World(){
     };
     this.players = [];
     this.platforms = [];
+    this.bullets = [];
 }
 
 /**
@@ -40,14 +41,39 @@ World.prototype.addPlatform = function (platform) {
  * Updates every object in the world
  * @param keys
  */
-World.prototype.update = function (keys) {
+World.prototype.update = function (keys, mouseLoc) {
     var that = this; //Used for scoping
 
     //Update each player in the players list
     this.players.forEach(function (player, index) {
-        player.update(keys, that.constants, that.platforms);
+        player.update(keys, that.constants, that.platforms, mouseLoc);
     });
 };
+
+function Bullet(startingPos, speed, mousePos){
+    var deltaX = mousePos.x - startingPos.x;
+    var deltaY = mousePos.y - startingPos.y;
+    var multiplier = Math.sqrt((deltaX*deltaX + deltaY*deltaY)/(speed*speed));
+    this.velX = deltaX / multiplier;
+    this.velY = deltaY / multiplier;
+
+    this.x = startingPos.x;
+    this.y = startingPos.y;
+    this.accelX = 0;
+    this.accelY = 0;
+
+    this.physicalFeatures = {
+        color: "black",
+        mass: 1,
+        width: 10,
+        height: 10
+    };
+
+    this.node = new createjs.Shape();
+    this.node.graphics.beginFill(this.physicalFeatures.color).drawRect(0, 0, this.physicalFeatures.width, this.physicalFeatures.height);
+    this.node.x = this.x;
+    this.node.y = this.y;
+}
 
 /**
  * Creates a player object
@@ -104,8 +130,7 @@ function Player(startingPos, physicalFeatures, startingWeapon) {
  * Update the player with corrisponding input
  * @param keys
  */
-Player.prototype.inputUpdate = function (keys) {
-
+Player.prototype.inputUpdate = function (keys, mouseLoc) {
     if (this.isOnGround) {
         if (keys[KEY_A]) {
             this.accelX = -3;
@@ -149,6 +174,11 @@ Player.prototype.inputUpdate = function (keys) {
     else {
         this.jumpTime = 0;
         this.accelY = .4;
+    }
+
+    if (mouseLoc != null) {
+        var startingPosition = {x: this.x, y: this.y};
+        stage.addChild(new Bullet(startingPosition, 5, mouseLoc).node)
     }
 
 
@@ -327,9 +357,9 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
  * @param keys
  * @param constants
  */
-Player.prototype.update = function (keys, constants, platforms) {
+Player.prototype.update = function (keys, constants, platforms, mouseLoc) {
     this.physicsUpdate(platforms, constants);
-    this.inputUpdate(keys);
+    this.inputUpdate(keys, mouseLoc);
 };
 
 function Platform(position, physicalFeatures, color) {

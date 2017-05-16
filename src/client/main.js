@@ -4,6 +4,7 @@ var KEY_SPACE = 32, KEY_A = 65, KEY_W = 87, KEY_D = 68, KEY_S = 83, KEY_LEFT = 3
 //Setup
 var stage; //The object we draw/animate on (Canvas)
 var keys = {}; //Stores all keyevents
+var mouseLoc;
 
 //World
 var world;
@@ -33,6 +34,8 @@ function Main() {
     //Keyevents
     this.document.onkeydown = keydown;
     this.document.onkeyup = keyup;
+    this.document.onmousedown = mousedown;
+    this.document.onmouseup = mouseup;
 }
 
 function addDebugVisuals(){
@@ -43,7 +46,7 @@ function addDebugVisuals(){
  * Called each frame to update everything
  */
 function update(){
-    world.update(keys);
+    world.update(keys, mouseLoc);
     stage.update(); //Repaint
 }
 
@@ -77,4 +80,12 @@ function keydown(event) {
  */
 function keyup(event) {
     delete keys[event.keyCode];
+}
+
+function mousedown(event) {
+    mouseLoc = {x: event.mouseX, y: event.mouseY};
+}
+
+function mouseup(event) {
+    mouseLoc = null;
 }
