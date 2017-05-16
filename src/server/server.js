@@ -19,6 +19,9 @@ var users = [];
 /* Object of initialized sockets */
 var sockets = {};
 
+/* Object of platforms */
+var platforms = {};
+
 app.use(express.static(__dirname + '/../client'));
 
 function movePlayer(player) {
@@ -53,6 +56,12 @@ io.on('connection', function (socket) {
             x: 0,
             y: 0
         },
+        keyPresses: {
+            forward: false,
+            backward: false,
+            jump: false,
+            fire: false
+        },
         currentWeapon: weapon
     };
 
@@ -82,6 +91,8 @@ io.on('connection', function (socket) {
 
             /* Emit locally that a player with name 'name' has connected */
             io.emit('playerJoin', { name: currentPlayer.name} );
+
+            socket.emit('platforms', platforms)
         }
 
     });
@@ -100,11 +111,9 @@ io.on('connection', function (socket) {
     });
 
     /* Refresh info */
-    socket.on('0', function(target) {
+    socket.on('0', function(playerData) { /* playerData contains current pressed keys, an X and Y which will be updated every 20th frame, and the weapon the player has currently switched to. */
         currentPlayer.lastHeartbeat = new Date().getTime();
-        if (target.x !== currentPlayer.x || target.y !== currentPlayer.y) {
-            currentPlayer.target = target;
-        }
+        currentPlayer.currentWeapon = playerData.weapon;
     });
 
     /* Fired a weapon */
@@ -113,3 +122,14 @@ io.on('connection', function (socket) {
     });
 
 });
+
+function Platform(position, physicalFeatures, color) {
+    this.x = position.x;
+    this.y = position.y;
+    this.physicalFeatures = {
+        width: physicalFeatures.width,
+        height: physicalFeatures.height
+    };
+
+    this.color = color;
+}
