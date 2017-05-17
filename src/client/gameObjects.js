@@ -289,14 +289,14 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
     } else if (nextFrameX + this.physicalFeatures.width >= target.x && nextFrameX + this.physicalFeatures.width <= target.x + target.physicalFeatures.width) {
         xIntersectLeft = true;
     }
-    if (nextFrameY >= target.y && nextFrameY <= target.y + target.physicalFeatures.height) {
+    if (nextFrameY >= target.y && nextFrameY <= target.y + target.physicalFeatures.height && this.velY < 0) {
         // console.log("next Frame y: " + nextFrameY);
         // console.log("target y: " + target.y);
         // console.log("target y2: " + target.y + target.physicalFeatures.height);
         // console.log("Top Hit");
         yIntersectTop = true;
     }
-    if (nextFrameY + this.physicalFeatures.height >= target.y && nextFrameY + this.physicalFeatures.height <= target.y + target.physicalFeatures.height) {
+    if (nextFrameY + this.physicalFeatures.height >= target.y && nextFrameY + this.physicalFeatures.height <= target.y + target.physicalFeatures.height && this.velY > 0) {
         yIntersectBottom = true;
         // console.log("Bottom Hit");
     }
@@ -343,7 +343,7 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
                 this.accelX = -this.accelX;
                 this.velX = -this.velX;
             }
-            if (target.physicalFeatures.height == 100) {
+            if (target.physicalFeatures.height == 101) {
                 window.alert("You're Gay");
             }
         }

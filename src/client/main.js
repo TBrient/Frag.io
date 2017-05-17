@@ -19,11 +19,34 @@ function Main() {
     //Set up the world
     world = new World();
     world.addPlayer(new Player({x: 50, y: 500}, {color: "blue", mass: 65, width: 10, height: 15})); //Add a player
-    world.addPlatform(new Platform({x: 0, y: 700}, {width: 800, height: 20}, "red"));
-    world.addPlatform(new Platform({x: 300, y: 600}, {width: 100, height: 20}, "pink"));
+
+    //floor
+    world.addPlatform(new Platform({x: 0, y: 783}, {width: 580, height: 20}, "green"));
+    world.addPlatform(new Platform({x: 860, y: 783}, {width: 580, height: 20}, "green"));
+
+    world.addPlatform(new Platform({x: 560, y: 683}, {width: 20, height: 100}, "gray"));
+
+    world.addPlatform(new Platform({x: 400, y: 610}, {width: 100, height: 20}, "brown"));
+    world.addPlatform(new Platform({x: 275, y: 675}, {width: 100, height: 20}, "brown"));
+    world.addPlatform(new Platform({x: 100, y: 675}, {width: 100, height: 20}, "brown"));
+
+
+    world.addPlatform(new Platform({x: 275, y: 575}, {width: 20, height: 100}, "gray"));
+    world.addPlatform(new Platform({x: 560, y: 683}, {width: 150, height: 20}, "gray"));
+
+    world.addPlatform(new Platform({x: 600, y: 600}, {width: 100, height: 20}, "darkcyan"));
+    world.addPlatform(new Platform({x: 700, y: 580}, {width: 100, height: 20}, "darkcyan"));
+    world.addPlatform(new Platform({x: 800, y: 560}, {width: 100, height: 20}, "darkcyan"));
+
+
+
+
     world.addPlatform(new Platform({x: 500, y: 500}, {width: 100, height: 20}, "green"));
     world.addPlatform(new Platform({x: 700, y: 400}, {width: 100, height: 20}, "purple"));
-    world.addPlatform(new Platform({x: 900, y: 200}, {width: 100, height: 100}, "orange"));
+    world.addPlatform(new Platform({x: 900, y: 200}, {width: 101, height: 101}, "orange"));
+
+    //New Map
+    //world.addPlatform(new Platform({x: 0, y: 700}, {width: 800, height: 20}, "red"));
 
     addWorldToStage(world);
 
