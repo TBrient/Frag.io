@@ -9,6 +9,9 @@ var mouseLoc;
 //World
 var world;
 
+//Timer
+var timer = 0;
+
 /**
  * Main function that initializes everything
  * @constructor
@@ -59,6 +62,7 @@ function Main() {
     this.document.onkeyup = keyup;
     this.document.onmousedown = mousedown;
     this.document.onmouseup = mouseup;
+    this.document.onmousemove = mousemoved;
 }
 
 function addDebugVisuals(){
@@ -70,7 +74,11 @@ function addDebugVisuals(){
  */
 function update(){
     world.update(keys, mouseLoc);
+    mouseLoc = null;
     stage.update(); //Repaint
+    if (timer % 20 != 0) {
+        timer++;
+    }
 }
 
 /**
@@ -96,7 +104,6 @@ function keydown(event) {
     keys[event.keyCode] = true;
 }
 
-
 /**
  * Sets keys accordingly when a key is released
  * @param event
@@ -106,9 +113,24 @@ function keyup(event) {
 }
 
 function mousedown(event) {
-    mouseLoc = {x: event.mouseX, y: event.mouseY};
+    if (timer % 20 == 0){
+        mouseLoc = {x: event.x, y: event.y};
+        timer++;
+    }
+    // while (mouseLoc != null) {
+        if (timer % 20 == 0){
+            mouseLoc = {x: event.x, y: event.y};
+            timer++;
+        }
+    // }
 }
 
 function mouseup(event) {
     mouseLoc = null;
+}
+
+function mousemoved(event) {
+    if (mouseLoc != null){
+        mousedown(event);
+    }
 }

@@ -29,6 +29,16 @@ World.prototype.addPlayer = function (player) {
     this.players.push(player);
 };
 
+World.prototype.addBullets = function (bullet) {
+    this.bullets.push(bullet);
+    stage.addChild(bullet.node);
+};
+
+World.prototype.removeBullet = function (bullet) {
+    this.bullets.splice(this.bullets.indexOf(bullet), 1);
+    stage.removeChild(bullet.node);
+};
+
 /**
  * Adds a platform to the world's platform list
  * @param platform
@@ -48,6 +58,10 @@ World.prototype.update = function (keys, mouseLoc) {
     this.players.forEach(function (player, index) {
         player.update(keys, that.constants, that.platforms, mouseLoc);
     });
+
+    this.bullets.forEach(function (bullet) {
+        bullet.physicsUpdate(that.platforms);
+    })
 };
 
 function Bullet(startingPos, speed, mousePos){
@@ -57,10 +71,14 @@ function Bullet(startingPos, speed, mousePos){
     this.velX = deltaX / multiplier;
     this.velY = deltaY / multiplier;
 
+    console.log("deltaX: " + deltaX + " deltay: " + deltaY + " sped: " + speed);
+
     this.x = startingPos.x;
     this.y = startingPos.y;
     this.accelX = 0;
     this.accelY = 0;
+    this.isDestroyed = false;
+
 
     this.physicalFeatures = {
         color: "black",
@@ -69,11 +87,50 @@ function Bullet(startingPos, speed, mousePos){
         height: 10
     };
 
+
     this.node = new createjs.Shape();
     this.node.graphics.beginFill(this.physicalFeatures.color).drawRect(0, 0, this.physicalFeatures.width, this.physicalFeatures.height);
     this.node.x = this.x;
     this.node.y = this.y;
 }
+
+Bullet.prototype.physicsUpdate = function (platforms) {
+    this.x += this.velX;
+    this.y += this.velY;
+    this.node.x = this.x;
+    this.node.y = this.y;
+
+    var that = this;
+
+    platforms.forEach(function (platform) {
+        that.collisionCheck(platform);
+    });
+};
+
+Bullet.prototype.collisionCheck = function (target) {
+    var rightSideOfBullet = this.x + this.physicalFeatures.width;
+    var leftSideOfBullet = this.x;
+    var topOfBullet = this.y;
+    var bottomOfBullet = this.y + this.physicalFeatures.height;
+
+    var rightSideOfPlatform = target.x + target.physicalFeatures.width;
+    var leftSideOfPlatform = target.x;
+    var topOfPlatform = target.y;
+    var bottomOfPlatform = target.y + target.physicalFeatures.height;
+
+    var xCollide = false, yCollide = false;
+
+    if (rightSideOfBullet > leftSideOfPlatform && leftSideOfBullet < rightSideOfPlatform) {
+        xCollide = true;
+    }
+    if (topOfBullet < bottomOfPlatform && bottomOfBullet > topOfPlatform)  {
+        yCollide = true;
+    }
+
+    if (xCollide && yCollide) {
+        world.removeBullet(this);
+    }
+};
 
 /**
  * Creates a player object
@@ -178,7 +235,7 @@ Player.prototype.inputUpdate = function (keys, mouseLoc) {
 
     if (mouseLoc != null) {
         var startingPosition = {x: this.x, y: this.y};
-        stage.addChild(new Bullet(startingPosition, 5, mouseLoc).node)
+        world.addBullets(new Bullet(startingPosition, 5, mouseLoc));
     }
 
 
@@ -290,24 +347,13 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         xIntersectLeft = true;
     }
     if (nextFrameY >= target.y && nextFrameY <= target.y + target.physicalFeatures.height && this.velY < 0) {
-        // console.log("next Frame y: " + nextFrameY);
-        // console.log("target y: " + target.y);
-        // console.log("target y2: " + target.y + target.physicalFeatures.height);
-        // console.log("Top Hit");
         yIntersectTop = true;
     }
     if (nextFrameY + this.physicalFeatures.height >= target.y && nextFrameY + this.physicalFeatures.height <= target.y + target.physicalFeatures.height && this.velY > 0) {
         yIntersectBottom = true;
-        // console.log("Bottom Hit");
     }
 
-    // this.y += 5;
-
     if (xIntersectMain && (yIntersectBottom || yIntersectTop)) {
-        // console.log("This Y: " + this.y + " This AccelY: " + this.accelY + " This VelY: " + this.velY);
-        // console.log("Target Top Y: " + target.y + " Target Bottom Y: " + (target.y + target.physicalFeatures.height));
-        // console.log(this.y);
-        // console.log(target.y);
         if (yIntersectBottom) {
             this.y += (target.y - this.y - this.physicalFeatures.height); //Only works if intersecting with the bottom of player (top of platform)
             this.isOnGround = true;
@@ -316,30 +362,17 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         }
         if (yIntersectTop) {
             this.y = (target.y + target.physicalFeatures.height); //Works for top of player (bottom of platform)
-            // if (((this.x <= (target.x + 2) && this.x >= (target.x - 2)) || (this.x >= (target.x + target.physicalFeatures.width - 10) && this.x <= (target.x + target.physicalFeatures.width - 6))) && this.velX != 0) {
-            //     this.isOnGround = true;
-            //
-            // } else {
-            //     this.isOnGround = false;
-            // }
             this.accelY = 0;
             this.velY = 0;
         }
-        // if ((this.x <= target.x + target.physicalFeatures.width+1 && this.x >= target.x + target.physicalFeatures.width-1) && (this.x + this.physicalFeatures.width >= target.x-1 && this.x + this.physicalFeatures.width <= target.x+1)) {
-        //     this.accelX = -this.accelX;
-        //     this.velX = -this.velX;
-        // }
+
     } else if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
         var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
-        console.log("this.y: " + three);
-        console.log("target.y + target.physicalFeatures.height - 2: " + four);
         if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && !this.isJumping && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
-            if (this.velX <= 0) {
-                // this.x = target.x - this.physicalFeatures.width;
+            if (this.velX > 0 && xIntersectLeft) {
                 this.accelX = -this.accelX;
                 this.velX = -this.velX;
-            } else {
-                // this.x = target.x + target.physicalFeatures.width;
+            } else if (this.velX < 0 && xIntersectRight) {
                 this.accelX = -this.accelX;
                 this.velX = -this.velX;
             }
