@@ -71,7 +71,7 @@ function Bullet(startingPos, speed, mousePos){
     this.velX = deltaX / multiplier;
     this.velY = deltaY / multiplier;
 
-    console.log("deltaX: " + deltaX + " deltay: " + deltaY + " sped: " + speed);
+    // console.log("deltaX: " + deltaX + " deltay: " + deltaY + " sped: " + speed);
 
     this.x = startingPos.x;
     this.y = startingPos.y;
@@ -292,41 +292,45 @@ Player.prototype.physicsUpdate = function (platforms, constants) {
     this.velY += this.accelY;
     this.y += this.velY;
 
+    if (this.y > 1440) {
+        this.x = 50;
+        this.y = 500;
+        this.velY = 0;
+        this.velx = 0;
+    }
 
     this.node.x = this.x;
     this.node.y = this.y;
 };
 
-Player.prototype.collided = function (side) {
-    if (Math.abs(side) === 1) {
-        this.velX = this.velX*(-0.1);
-    } else {
-        this.velY = 0;
-    }
-};
+// Player.prototype.collided = function (side) {
+//     if (Math.abs(side) === 1) {
+//         this.velX = this.velX*(-0.1);
+//     } else {
+//         this.velY = 0;
+//     }
+// };
 
 Player.prototype.collisionUpdate = function (platforms, constants) {
     if (this.isJumping) {
         this.isJumping = false;
         this.isOnGround = false;
-    } else {
-        if (this.isCollidingNextFrame(platforms)) {
+    }
+    if (this.isCollidingNextFrame(platforms)) {
 
-        } else {
-            this.isOnGround = false;
-            // this.accelY = constants.gravity;
-        }
+    } else {
+        this.isOnGround = false;
+        // this.accelY = constants.gravity;
     }
 };
 
 Player.prototype.isCollidingNextFrame = function (platforms) {
     var that = this;
     var returnValue = false;
+    // console.log(platforms);
     platforms.forEach(
         function (platform) {
-            if (!returnValue) {
-                returnValue = that.isIntersectingNextFrame(platform);
-            }
+            returnValue = returnValue || that.isIntersectingNextFrame(platform);
         }
     );
     return returnValue;
@@ -346,14 +350,18 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
     } else if (nextFrameX + this.physicalFeatures.width >= target.x && nextFrameX + this.physicalFeatures.width <= target.x + target.physicalFeatures.width) {
         xIntersectLeft = true;
     }
-    if (nextFrameY >= target.y && nextFrameY <= target.y + target.physicalFeatures.height && this.velY < 0) {
+    if (nextFrameY >= target.y && nextFrameY <= target.y + target.physicalFeatures.height) {
         yIntersectTop = true;
     }
-    if (nextFrameY + this.physicalFeatures.height >= target.y && nextFrameY + this.physicalFeatures.height <= target.y + target.physicalFeatures.height && this.velY > 0) {
+    if (nextFrameY + this.physicalFeatures.height >= target.y && nextFrameY + this.physicalFeatures.height <= target.y + target.physicalFeatures.height) {
         yIntersectBottom = true;
     }
 
-    if (xIntersectMain && (yIntersectBottom || yIntersectTop)) {
+    // if (target.y == 575) {
+        // console.log("xRight: " + xIntersectRight + " xLeft: " + xIntersectLeft + " yBottom: " + yIntersectBottom + " yTop: " + yIntersectTop);
+    // }
+
+    if (xIntersectMain && ((yIntersectBottom && this.velY > 0) || (yIntersectTop && this.velY < 0))) {
         if (yIntersectBottom) {
             this.y += (target.y - this.y - this.physicalFeatures.height); //Only works if intersecting with the bottom of player (top of platform)
             this.isOnGround = true;
@@ -366,9 +374,10 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
             this.velY = 0;
         }
 
-    } else if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
+    }
+    if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
         var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
-        if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && !this.isJumping && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
+        if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
             if (this.velX > 0 && xIntersectLeft) {
                 this.accelX = -this.accelX;
                 this.velX = -this.velX;
@@ -404,7 +413,6 @@ function Platform(position, physicalFeatures, color) {
     };
 
     this.color = color;
-
     //Create the node
     this.node = new createjs.Shape();
     this.node.graphics.beginFill(this.color).drawRect(0, 0, this.physicalFeatures.width, this.physicalFeatures.height);
