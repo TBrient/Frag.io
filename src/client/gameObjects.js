@@ -231,7 +231,7 @@ Player.prototype.inputUpdate = function (keys, mouseLoc) {
     else {
         this.jumpTime = 0;
         this.accelY = .4;
-    }
+2    }
 
     if (mouseLoc != null) {
         var startingPosition = {x: this.x, y: this.y};
@@ -316,27 +316,33 @@ Player.prototype.collisionUpdate = function (platforms, constants) {
         this.isJumping = false;
         this.isOnGround = false;
     }
-    if (this.isCollidingNextFrame(platforms)) {
-
-    } else {
-        this.isOnGround = false;
-        // this.accelY = constants.gravity;
-    }
+    this.isCollidingNextFrame(platforms);
+    // if (this.isCollidingNextFrame(platforms)) {
+    //
+    // } else {
+    //     this.isOnGround = false;
+    //     // this.accelY = constants.gravity;
+    // }
 };
 
 Player.prototype.isCollidingNextFrame = function (platforms) {
     var that = this;
     var returnValue = false;
-    // console.log(platforms);
+    console.log("called");
     platforms.forEach(
         function (platform) {
-            returnValue = returnValue || that.isIntersectingNextFrame(platform);
+            that.isIntersectingNextFrame(platform);
         }
     );
+    returnValue = true;
     return returnValue;
 };
 
 Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they are gonna collide next frame, find delta and move by that much
+    if (target.y == 575) {
+        console.log("xRight: " + xIntersectRight + " xLeft: " + xIntersectLeft + " yBottom: " + yIntersectBottom + " yTop: " + yIntersectTop);
+    }
+
     var nextFrameX = this.velX + this.x;
     var nextFrameY = this.velY + this.accelY + this.y;
     var xIntersectMain = false, xIntersectRight = false, xIntersectLeft = false, yIntersectTop = false, yIntersectBottom = false; //Directions refer to player side
@@ -357,10 +363,6 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         yIntersectBottom = true;
     }
 
-    // if (target.y == 575) {
-        // console.log("xRight: " + xIntersectRight + " xLeft: " + xIntersectLeft + " yBottom: " + yIntersectBottom + " yTop: " + yIntersectTop);
-    // }
-
     if (xIntersectMain && ((yIntersectBottom && this.velY > 0) || (yIntersectTop && this.velY < 0))) {
         if (yIntersectBottom) {
             this.y += (target.y - this.y - this.physicalFeatures.height); //Only works if intersecting with the bottom of player (top of platform)
@@ -375,20 +377,32 @@ Player.prototype.isIntersectingNextFrame = function (target) { //TODO: If they a
         }
 
     }
+    if (xIntersectLeft && (yIntersectTop || yIntersectBottom) && this.velX > 0) {
+        this.accelX = -this.accelX;
+        this.velX = -this.velX + this.velX * 0.25;
+    }
+
+    if (xIntersectRight && (yIntersectTop || yIntersectBottom) && this.velX < 0) {
+        this.accelX = -this.accelX;
+        this.velX = -this.velX + this.velX * 0.25;
+    }
+
     if ((xIntersectRight || xIntersectLeft) && (yIntersectBottom || yIntersectTop)) {
-        var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
-        if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
-            if (this.velX > 0 && xIntersectLeft) {
-                this.accelX = -this.accelX;
-                this.velX = -this.velX;
-            } else if (this.velX < 0 && xIntersectRight) {
-                this.accelX = -this.accelX;
-                this.velX = -this.velX;
-            }
-            if (target.physicalFeatures.height == 101) {
-                window.alert("You're Gay");
-            }
+        // var one = this.y + this.physicalFeatures.height, two = target.y, three = this.y, four = target.y + target.physicalFeatures.height;
+        // // if ((this.y + this.physicalFeatures.height < target.y || this.y + this.physicalFeatures.height > target.y+2) && ((this.y) > (target.y + target.physicalFeatures.height) || (this.y) < (target.y + target.physicalFeatures.height - 5))) {
+        //     if (this.velX > 0 && xIntersectLeft) {
+        //         // this.accelX = -this.accelX;
+        //         // this.velX = -this.velX;
+        //     } else if (this.velX < 0 && xIntersectRight) {
+        //         // this.accelX = -this.accelX;
+        //         // this.velX = -this.velX;
+        //     }
+        //     this.velX = 0;
+        //     this.accelX = 0;
+        if (target.physicalFeatures.height == 101) {
+            window.alert("You're Gay");
         }
+        // }
     }
 
     return xIntersectMain && (yIntersectBottom || yIntersectTop);

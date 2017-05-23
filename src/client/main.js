@@ -34,7 +34,7 @@ function Main() {
     world.addPlatform(new Platform({x: 100, y: 675}, {width: 100, height: 20}, "brown"));
 
 
-    world.addPlatform(new Platform({x: 275, y: 575}, {width: 20, height: 100}, "gray"));
+    world.addPlatform(new Platform({x: 275, y: 575}, {width: 20, height: 100}, "pink"));
     world.addPlatform(new Platform({x: 560, y: 683}, {width: 150, height: 20}, "gray"));
 
     world.addPlatform(new Platform({x: 600, y: 600}, {width: 100, height: 20}, "darkcyan"));
