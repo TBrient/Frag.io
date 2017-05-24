@@ -27,15 +27,20 @@ function Main() {
     world.addPlatform(new Platform({x: 0, y: 783}, {width: 580, height: 20}, "green"));
     world.addPlatform(new Platform({x: 860, y: 783}, {width: 580, height: 20}, "green"));
 
-    world.addPlatform(new Platform({x: 560, y: 683}, {width: 20, height: 100}, "gray"));
+    //side walls
+    world.addPlatform(new Platform({x: 0, y: 0}, {width: 20, height: 783}, "dodgerblue"));
+    world.addPlatform(new Platform({x: 1420, y: 0}, {width: 20, height: 783}, "dodgerblue"));
+
+
+    world.addPlatform(new Platform({x: 560, y: 703}, {width: 20, height: 30}, "gray"));
 
     world.addPlatform(new Platform({x: 400, y: 610}, {width: 100, height: 20}, "brown"));
     world.addPlatform(new Platform({x: 275, y: 675}, {width: 100, height: 20}, "brown"));
     world.addPlatform(new Platform({x: 100, y: 675}, {width: 100, height: 20}, "brown"));
 
 
-    world.addPlatform(new Platform({x: 275, y: 575}, {width: 20, height: 100}, "pink"));
-    world.addPlatform(new Platform({x: 560, y: 683}, {width: 150, height: 20}, "gray"));
+    world.addPlatform(new Platform({x: 275, y: 595}, {width: 20, height: 80}, "gray"));
+    world.addPlatform(new Platform({x: 560, y: 683}, {width: 170, height: 20}, "gray"));
 
     world.addPlatform(new Platform({x: 600, y: 600}, {width: 100, height: 20}, "darkcyan"));
     world.addPlatform(new Platform({x: 700, y: 580}, {width: 100, height: 20}, "darkcyan"));
@@ -46,10 +51,26 @@ function Main() {
 
     world.addPlatform(new Platform({x: 500, y: 500}, {width: 100, height: 20}, "green"));
     world.addPlatform(new Platform({x: 700, y: 400}, {width: 100, height: 20}, "purple"));
+
+
+    world.addPlatform(new Platform({x: 350, y: 400}, {width: 100, height: 20}, "purple"));
+
+    world.addPlatform(new Platform({x: 450, y: 300}, {width: 250, height: 5}, "black"));
+    //world.addPlatform(new Platform({x: 600, y: 300}, {width: 125, height: 5}, "black"));
+
+    //world.addPlatform(new Platform({x: 450, y: 325}, {width: 200, height: 5}, "black"));
+
+
+
     world.addPlatform(new Platform({x: 900, y: 200}, {width: 101, height: 101}, "orange"));
 
-    //New Map
-    //world.addPlatform(new Platform({x: 0, y: 700}, {width: 800, height: 20}, "red"));
+    world.addPlatform(new Platform({x: 900, y: 650}, {width: 120, height: 20}, "brown"));
+    world.addPlatform(new Platform({x: 1000, y: 670}, {width: 20, height: 55}, "red"));
+    world.addPlatform(new Platform({x: 1100, y: 670}, {width: 20, height:55}, "red"));
+    world.addPlatform(new Platform({x: 1100, y: 650}, {width: 120, height: 20}, "brown"));
+
+
+
 
     addWorldToStage(world);
 
