@@ -64,6 +64,7 @@ function Main() {
 
     world.addPlatform(new Platform({x: 900, y: 200}, {width: 101, height: 101}, "orange"));
 
+    //thing on the right
     world.addPlatform(new Platform({x: 900, y: 650}, {width: 120, height: 20}, "brown"));
     world.addPlatform(new Platform({x: 1000, y: 670}, {width: 20, height: 55}, "red"));
     world.addPlatform(new Platform({x: 1100, y: 670}, {width: 20, height:55}, "red"));
